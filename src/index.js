@@ -157,6 +157,8 @@ export default class ReactUserTour extends Component {
       ...defaultStyle,
       ...this.props.style,
     };
+    console.log(defaultStyle, style);
+
 		const arrow = (
 			this.props.arrow
 			?
