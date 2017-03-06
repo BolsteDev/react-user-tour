@@ -143,7 +143,20 @@ export default class ReactUserTour extends Component {
 			currentTourStep.horizontalOffset,
 			currentTourStep.verticalOffset
 		);
-		const style = {...this.props.style};
+
+    const defaultStyle = {
+  		height: 150,
+  		width: 350,
+  		position: "absolute",
+  		zIndex: 9999,
+  		backgroundColor: "#fff",
+  		color: "#494949",
+  		boxShadow: "0 6px 8px 0 rgba(0, 0, 0, 0.24)"
+    }
+		const style = {
+      ...defaultStyle,
+      ...this.props.style,
+    };
 		const arrow = (
 			this.props.arrow
 			?
