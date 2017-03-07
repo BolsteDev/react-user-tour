@@ -132,6 +132,16 @@ class Demo extends Component {
 						onNext={(step) => this.setState({tourStep: step})}
 						onBack={(step) => this.setState({tourStep: step})}
 						onCancel={() => this.setState({isTourActive: false})}
+            style={{
+            // background: "#EBEFF2",
+            height: "auto",
+            // padding: "15px",
+            // paddingBottom: "50px",
+            // width: '350px',
+            // zIndex: '9999',
+            // position: 'absolute',
+            // boxShadow: 'rgba(0, 0, 0, 0.239216) 0px 6px 8px 0px',
+          }}
 						steps={[
 							{
 								step: 1,
@@ -144,7 +154,12 @@ class Demo extends Component {
 								step: 2,
 								selector: ".stop-2",
 								title: <div style={tourTitleStyle}>Simply</div>,
-								body: <div style={tourMessageStyle}>pass in a class class prefixe with `.` or id prefixed with `#`</div>
+								body: <div style={tourMessageStyle}>
+                  pass in a class class prefixe with `.` or id prefixed with `#`.
+                  pass in a class class prefixe with `.` or id prefixed with `#`.
+                  pass in a class class prefixe with `.` or id prefixed with `#`.
+                  pass in a class class prefixe with `.` or id prefixed with `#`.
+                </div>
 							},
 							{
 								step: 3,
@@ -168,7 +183,12 @@ class Demo extends Component {
 								step: 6,
 								selector: ".stop-6",
 								title: <div style={tourTitleStyle}>What?</div>,
-								body: <div style={tourMessageStyle}>we'll even take care of scrolling to elements outside of the viewbox. Enjoy!</div>
+								body: <div style={tourMessageStyle}>
+                  we'll even take care of scrolling to elements outside of the viewbox. Enjoy!
+                  we'll even take care of scrolling to elements outside of the viewbox. Enjoy!
+                  we'll even take care of scrolling to elements outside of the viewbox. Enjoy!
+                  we'll even take care of scrolling to elements outside of the viewbox. Enjoy!
+                </div>
 							}
 						]}
 					/>

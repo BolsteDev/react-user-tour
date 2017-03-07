@@ -27,11 +27,74 @@ export default class ReactUserTour extends Component {
       boxShadow: "0 6px 8px 0 rgba(0, 0, 0, 0.24)",
       ...this.props.style,
     }
+
+    this.state = {
+      position: {
+        top: 0,
+        left: 0,
+      },
+      currentTourStep: {}
+    }
 	}
+
+  componentWillMount() {
+    const currentTourStep = this.props.steps.filter(step => step.step === this.props.step)[0];
+
+    let tourHeight = this.props.style.height || this.styles.height;
+    let tourWidth = this.props.style.width || this.styles.width;
+
+    this.setState({
+      currentTourStep,
+    }, () => {
+      this.setCurrentPosition(tourWidth, tourHeight);
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentTourStep = nextProps.steps.filter(step => step.step === nextProps.step)[0];
+    this.setState({
+      currentTourStep,
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const tourBox = document.querySelector(".tour-box");
+
+    let tourHeight = this.styles.height;
+    let tourWidth = this.styles.width;
+
+    if (tourBox) {
+      tourHeight = this.styles.height === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().height : this.styles.height;
+      tourWidth = this.styles.width === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().width : this.styles.width;
+    }
+    this.setCurrentPosition(tourWidth, tourHeight);
+  }
 
 	shouldComponentUpdate(nextProps) {
 		return this.props.step !== nextProps.step || this.props.active !== nextProps.active;
 	}
+
+  setCurrentPosition(w, h) {
+    const { currentTourStep, position } = this.state;
+
+    const newPosition = this.getStepPosition(
+    	currentTourStep.selector,
+      w,
+      h,
+    	currentTourStep.position,
+    	currentTourStep.margin,
+    	currentTourStep.horizontalOffset,
+    	currentTourStep.verticalOffset
+    );
+
+    if (position.top !== newPosition.top || position.left !== newPosition.left) {
+      this.setState({
+        position: newPosition,
+      }, () => {
+        this.forceUpdate();
+      });
+    }
+  }
 
 	getStepPosition(
 		selector,
@@ -46,7 +109,6 @@ export default class ReactUserTour extends Component {
 		const windowWidth = window.innerWidth;
 		const el = document.querySelector(selector);
 		if (el) {
-      console.debug(tourElHeight, tourElWidth);
 			let position = el ? el.getBoundingClientRect() : {};
 			const isElementBelowViewBox = viewBoxHelpers.isElementBelowViewBox(windowHeight, position.top);
 			const isElementAboveViewBox = viewBoxHelpers.isElementBelowViewBox(position.bottom);
@@ -127,60 +189,34 @@ export default class ReactUserTour extends Component {
 
 	getCustomArrow(position) {
 		return (
-				typeof this.props.arrow === "function"
-				?
-				this.props.arrow({
-					position: position.positioned,
-					width: this.styles.width,
-					height: this.styles.height,
-					size: this.props.arrowSize,
-					color: this.props.arrowColor
-				})
-				:
-				this.props.arrow
-			);
+			typeof this.props.arrow === "function"
+			?
+			this.props.arrow({
+				position: position.positioned,
+				width: this.styles.width,
+				height: this.styles.height,
+				size: this.props.arrowSize,
+				color: this.props.arrowColor
+			})
+			:
+			this.props.arrow
+		);
 	}
 
 	render() {
-		const currentTourStep = this.props.steps.filter(step => step.step === this.props.step)[0];
-		if (!this.props.active || !currentTourStep) {
+		if (!this.props.active || !this.state.currentTourStep) {
 			return <span />;
 		}
 
     const tourBox = document.querySelector(".tour-box");
 
-    let tourHeight;
-    let tourWidth;
+    let tourHeight = this.styles.height;
+    let tourWidth = this.styles.width;
 
     if (tourBox) {
-      debugger;
       tourHeight = this.styles.height === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().height : this.styles.height;
       tourWidth = this.styles.width === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().width : this.styles.width;
     }
-
-		const position = this.getStepPosition(
-			currentTourStep.selector,
-      tourWidth || this.styles.width,
-      tourHeight || this.styles.height,
-			currentTourStep.position,
-			currentTourStep.margin,
-			currentTourStep.horizontalOffset,
-			currentTourStep.verticalOffset
-		);
-
-    const defaultStyle = {
-  		height: 150,
-  		width: 350,
-  		position: "absolute",
-  		zIndex: 9999,
-  		backgroundColor: "#fff",
-  		color: "#494949",
-  		boxShadow: "0 6px 8px 0 rgba(0, 0, 0, 0.24)"
-    }
-		const style = {
-      ...this.styles,
-      ...this.props.style,
-    };
 
 		const arrow = (
 			this.props.arrow
@@ -188,9 +224,9 @@ export default class ReactUserTour extends Component {
 			this.getCustomArrow(position)
 			:
 			<Arrow
-				position={position.positioned}
-				width={this.styles.width}
-				height={this.styles.height}
+				position={this.state.position.positioned}
+				width={tourWidth}
+				height={tourHeight}
 				size={this.props.arrowSize}
 				color={this.props.arrowColor}
 			/>
@@ -259,14 +295,21 @@ export default class ReactUserTour extends Component {
 
 		return (
 			<div className="react-user-tour-container" style={this.props.containerStyle}>
-				<Motion style={{x: spring(position.left), y: spring(position.top)}}>
+				<Motion style={{x: spring(this.state.position.left), y: spring(this.state.position.top)}}>
 					{({x, y}) =>
 
-						<div className="tour-box" style={{...this.styles, transform: `translate3d(${x}px, ${y}px, 0)`}}>
+						<div
+              className="tour-box"
+              style={{
+                ...this.styles,
+                ...this.props.style,
+                transform: `translate3d(${x}px, ${y}px, 0)`
+              }}
+            >
 							{arrow}
 							{closeButton}
-							{currentTourStep.title}
-							{currentTourStep.body}
+							{this.state.currentTourStep.title}
+							{this.state.currentTourStep.body}
 							{tourButtonContainer}
 						</div>
 					}

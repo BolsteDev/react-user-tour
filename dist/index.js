@@ -61,13 +61,93 @@ var ReactUserTour = function (_Component) {
 			left: 0
 		};
 		_this.getStepPosition = _this.getStepPosition.bind(_this);
+
+		_this.styles = _extends({
+			height: 150,
+			width: 350,
+			position: "absolute",
+			zIndex: 9999,
+			backgroundColor: "#fff",
+			color: "#494949",
+			boxShadow: "0 6px 8px 0 rgba(0, 0, 0, 0.24)"
+		}, _this.props.style);
+
+		_this.state = {
+			position: {
+				top: 0,
+				left: 0
+			},
+			currentTourStep: {}
+		};
 		return _this;
 	}
 
 	_createClass(ReactUserTour, [{
+		key: "componentWillMount",
+		value: function componentWillMount() {
+			var _this2 = this;
+
+			var currentTourStep = this.props.steps.filter(function (step) {
+				return step.step === _this2.props.step;
+			})[0];
+
+			var tourHeight = this.props.style.height || this.styles.height;
+			var tourWidth = this.props.style.width || this.styles.width;
+
+			this.setState({
+				currentTourStep: currentTourStep
+			}, function () {
+				_this2.setCurrentPosition(tourWidth, tourHeight);
+			});
+		}
+	}, {
+		key: "componentWillReceiveProps",
+		value: function componentWillReceiveProps(nextProps) {
+			var currentTourStep = nextProps.steps.filter(function (step) {
+				return step.step === nextProps.step;
+			})[0];
+			this.setState({
+				currentTourStep: currentTourStep
+			});
+		}
+	}, {
+		key: "componentDidUpdate",
+		value: function componentDidUpdate(prevProps, prevState) {
+			var tourBox = document.querySelector(".tour-box");
+
+			var tourHeight = this.styles.height;
+			var tourWidth = this.styles.width;
+
+			if (tourBox) {
+				tourHeight = this.styles.height === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().height : this.styles.height;
+				tourWidth = this.styles.width === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().width : this.styles.width;
+			}
+			this.setCurrentPosition(tourWidth, tourHeight);
+		}
+	}, {
 		key: "shouldComponentUpdate",
 		value: function shouldComponentUpdate(nextProps) {
 			return this.props.step !== nextProps.step || this.props.active !== nextProps.active;
+		}
+	}, {
+		key: "setCurrentPosition",
+		value: function setCurrentPosition(w, h) {
+			var _this3 = this;
+
+			var _state = this.state,
+			    currentTourStep = _state.currentTourStep,
+			    position = _state.position;
+
+
+			var newPosition = this.getStepPosition(currentTourStep.selector, w, h, currentTourStep.position, currentTourStep.margin, currentTourStep.horizontalOffset, currentTourStep.verticalOffset);
+
+			if (position.top !== newPosition.top || position.left !== newPosition.left) {
+				this.setState({
+					position: newPosition
+				}, function () {
+					_this3.forceUpdate();
+				});
+			}
 		}
 	}, {
 		key: "getStepPosition",
@@ -80,21 +160,21 @@ var ReactUserTour = function (_Component) {
 			var windowWidth = window.innerWidth;
 			var el = document.querySelector(selector);
 			if (el) {
-				var position = el ? el.getBoundingClientRect() : {};
-				var isElementBelowViewBox = viewBoxHelpers.isElementBelowViewBox(windowHeight, position.top);
-				var isElementAboveViewBox = viewBoxHelpers.isElementBelowViewBox(position.bottom);
+				var _position = el ? el.getBoundingClientRect() : {};
+				var isElementBelowViewBox = viewBoxHelpers.isElementBelowViewBox(windowHeight, _position.top);
+				var isElementAboveViewBox = viewBoxHelpers.isElementBelowViewBox(_position.bottom);
 				if (isElementBelowViewBox) {
-					position = (0, _scrollToPosition2.default)(el, position.bottom);
+					_position = (0, _scrollToPosition2.default)(el, _position.bottom);
 				} else if (isElementAboveViewBox) {
-					position = (0, _scrollToPosition2.default)(el, window.pageYOffset + position.top);
+					_position = (0, _scrollToPosition2.default)(el, window.pageYOffset + _position.top);
 				}
-				var shouldPositionLeft = viewBoxHelpers.shouldPositionLeft(windowWidth, position.left);
-				var shouldPositionAbove = viewBoxHelpers.shouldPositionAbove(windowHeight, position.bottom);
-				var shouldPositionBelow = viewBoxHelpers.shouldPositionBelow(position.top);
+				var shouldPositionLeft = viewBoxHelpers.shouldPositionLeft(windowWidth, _position.left);
+				var shouldPositionAbove = viewBoxHelpers.shouldPositionAbove(windowHeight, _position.bottom);
+				var shouldPositionBelow = viewBoxHelpers.shouldPositionBelow(_position.top);
 				var elPos = void 0;
 				if (overridePos && _positionHelpers2.default[overridePos]) {
 					elPos = _positionHelpers2.default[overridePos]({
-						position: position,
+						position: _position,
 						tourElWidth: tourElWidth,
 						tourElHeight: tourElHeight,
 						arrowSize: this.props.arrowSize,
@@ -103,39 +183,39 @@ var ReactUserTour = function (_Component) {
 					});
 				} else if (shouldPositionLeft && !shouldPositionAbove && !shouldPositionBelow) {
 					elPos = _positionHelpers2.default.left({
-						position: position,
+						position: _position,
 						tourElWidth: tourElWidth,
 						margin: margin
 					});
 				} else if (shouldPositionAbove) {
 					elPos = shouldPositionLeft ? _positionHelpers2.default.topLeft({
-						position: position,
+						position: _position,
 						tourElWidth: tourElWidth,
 						tourElHeight: tourElHeight,
 						arrowSize: this.props.arrowSize,
 						margin: margin
 					}) : _positionHelpers2.default.top({
-						position: position,
+						position: _position,
 						tourElHeight: tourElHeight,
 						arrowSize: this.props.arrowSize,
 						margin: margin
 					});
 				} else if (shouldPositionBelow) {
 					elPos = shouldPositionLeft ? _positionHelpers2.default.bottomLeft({
-						position: position,
+						position: _position,
 						tourElWidth: tourElWidth,
 						arrowSize: this.props.arrowSize,
 						offsetHeight: el.offsetHeight,
 						margin: margin
 					}) : _positionHelpers2.default.bottom({
-						position: position,
+						position: _position,
 						arrowSize: this.props.arrowSize,
 						offsetHeight: el.offsetHeight,
 						margin: margin
 					});
 				} else {
 					elPos = _positionHelpers2.default.right({
-						position: position,
+						position: _position,
 						margin: margin
 					});
 				}
@@ -154,8 +234,8 @@ var ReactUserTour = function (_Component) {
 		value: function getCustomArrow(position) {
 			return typeof this.props.arrow === "function" ? this.props.arrow({
 				position: position.positioned,
-				width: this.props.style.width,
-				height: this.props.style.height,
+				width: this.styles.width,
+				height: this.styles.height,
 				size: this.props.arrowSize,
 				color: this.props.arrowColor
 			}) : this.props.arrow;
@@ -163,32 +243,26 @@ var ReactUserTour = function (_Component) {
 	}, {
 		key: "render",
 		value: function render() {
-			var _this2 = this;
+			var _this4 = this;
 
-			var currentTourStep = this.props.steps.filter(function (step) {
-				return step.step === _this2.props.step;
-			})[0];
-			if (!this.props.active || !currentTourStep) {
+			if (!this.props.active || !this.state.currentTourStep) {
 				return _react2.default.createElement("span", null);
 			}
-			var position = this.getStepPosition(currentTourStep.selector, this.props.style.width, this.props.style.height, currentTourStep.position, currentTourStep.margin, currentTourStep.horizontalOffset, currentTourStep.verticalOffset);
 
-			var defaultStyle = {
-				height: 150,
-				width: 350,
-				position: "absolute",
-				zIndex: 9999,
-				backgroundColor: "#fff",
-				color: "#494949",
-				boxShadow: "0 6px 8px 0 rgba(0, 0, 0, 0.24)"
-			};
-			var style = _extends({}, defaultStyle, this.props.style);
-			console.log(defaultStyle, style);
+			var tourBox = document.querySelector(".tour-box");
+
+			var tourHeight = this.styles.height;
+			var tourWidth = this.styles.width;
+
+			if (tourBox) {
+				tourHeight = this.styles.height === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().height : this.styles.height;
+				tourWidth = this.styles.width === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().width : this.styles.width;
+			}
 
 			var arrow = this.props.arrow ? this.getCustomArrow(position) : _react2.default.createElement(_arrow2.default, {
-				position: position.positioned,
-				width: this.props.style.width,
-				height: this.props.style.height,
+				position: this.state.position.positioned,
+				width: tourWidth,
+				height: tourHeight,
 				size: this.props.arrowSize,
 				color: this.props.arrowColor
 			});
@@ -199,10 +273,10 @@ var ReactUserTour = function (_Component) {
 				_tourButton2.default,
 				_extends({
 					onClick: function onClick() {
-						return _this2.props.onNext(_this2.props.step + 1);
+						return _this4.props.onNext(_this4.props.step + 1);
 					},
 					onTouchTap: function onTouchTap() {
-						return _this2.props.onNext(_this2.props.step + 1);
+						return _this4.props.onNext(_this4.props.step + 1);
 					}
 				}, extraButtonProps, {
 					className: "react-user-tour-next-button" }),
@@ -213,10 +287,10 @@ var ReactUserTour = function (_Component) {
 				_tourButton2.default,
 				_extends({
 					onClick: function onClick() {
-						return _this2.props.onBack(_this2.props.step - 1);
+						return _this4.props.onBack(_this4.props.step - 1);
 					},
 					onTouchTap: function onTouchTap() {
-						return _this2.props.onBack(_this2.props.step - 1);
+						return _this4.props.onBack(_this4.props.step - 1);
 					}
 				}, extraButtonProps, {
 					className: "react-user-tour-back-button" }),
@@ -262,17 +336,22 @@ var ReactUserTour = function (_Component) {
 				{ className: "react-user-tour-container", style: this.props.containerStyle },
 				_react2.default.createElement(
 					_reactMotion.Motion,
-					{ style: { x: (0, _reactMotion.spring)(position.left), y: (0, _reactMotion.spring)(position.top) } },
+					{ style: { x: (0, _reactMotion.spring)(this.state.position.left), y: (0, _reactMotion.spring)(this.state.position.top) } },
 					function (_ref) {
 						var x = _ref.x,
 						    y = _ref.y;
 						return _react2.default.createElement(
 							"div",
-							{ style: _extends({}, style, { transform: "translate3d(" + x + "px, " + y + "px, 0)" }) },
+							{
+								className: "tour-box",
+								style: _extends({}, _this4.styles, _this4.props.style, {
+									transform: "translate3d(" + x + "px, " + y + "px, 0)"
+								})
+							},
 							arrow,
 							closeButton,
-							currentTourStep.title,
-							currentTourStep.body,
+							_this4.state.currentTourStep.title,
+							_this4.state.currentTourStep.body,
 							tourButtonContainer
 						);
 					}
