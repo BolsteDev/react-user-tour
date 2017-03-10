@@ -126,6 +126,7 @@ class Demo extends Component {
 					so far away.
 				</p>
 				<div style={{position: "absolute", top: 0}}>
+          {this.state.isTourActive?
 					<Tour
 						active={this.state.isTourActive}
 						step={this.state.tourStep}
@@ -192,6 +193,8 @@ class Demo extends Component {
 							}
 						]}
 					/>
+          :
+          null}
 				</div>
 			</div>
 		);

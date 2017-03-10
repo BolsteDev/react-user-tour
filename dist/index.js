@@ -127,6 +127,9 @@ var ReactUserTour = function (_Component) {
 	}, {
 		key: "shouldComponentUpdate",
 		value: function shouldComponentUpdate(nextProps) {
+			if (!this.props.active && !nextProps.active) {
+				return false;
+			}
 			return this.props.step !== nextProps.step || this.props.active !== nextProps.active;
 		}
 	}, {
@@ -246,7 +249,7 @@ var ReactUserTour = function (_Component) {
 			var _this4 = this;
 
 			if (!this.props.active || !this.state.currentTourStep) {
-				return _react2.default.createElement("span", null);
+				return null;
 			}
 
 			var tourBox = document.querySelector(".tour-box");

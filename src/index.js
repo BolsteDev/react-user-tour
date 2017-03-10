@@ -71,6 +71,9 @@ export default class ReactUserTour extends Component {
   }
 
 	shouldComponentUpdate(nextProps) {
+    if (!this.props.active && !nextProps.active) {
+      return false;
+    }
 		return this.props.step !== nextProps.step || this.props.active !== nextProps.active;
 	}
 
@@ -205,7 +208,7 @@ export default class ReactUserTour extends Component {
 
 	render() {
 		if (!this.props.active || !this.state.currentTourStep) {
-			return <span />;
+			return null;
 		}
 
     const tourBox = document.querySelector(".tour-box");
