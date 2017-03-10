@@ -118,10 +118,12 @@ var ReactUserTour = function (_Component) {
 			var tourHeight = this.styles.height;
 			var tourWidth = this.styles.width;
 
+			console.debug(tourWidth, tourHeight, "before");
 			if (tourBox) {
 				tourHeight = this.styles.height === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().height : this.styles.height;
 				tourWidth = this.styles.width === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().width : this.styles.width;
 			}
+			console.debug(tourWidth, tourHeight, "after");
 			this.setCurrentPosition(tourWidth, tourHeight);
 		}
 	}, {
@@ -145,7 +147,7 @@ var ReactUserTour = function (_Component) {
 			var newPosition = this.getStepPosition(currentTourStep.selector, w, h, currentTourStep.position, currentTourStep.margin, currentTourStep.horizontalOffset, currentTourStep.verticalOffset);
 
 			if (position.top !== newPosition.top || position.left !== newPosition.left) {
-				console.debug("setting new position:", newPosition);
+				// console.debug("setting new position:", newPosition)
 				this.setState({
 					position: newPosition
 				}, function () {
