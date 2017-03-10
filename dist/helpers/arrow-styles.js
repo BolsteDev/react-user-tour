@@ -11,12 +11,13 @@ var defaultArrow = {
 
 var arrowUp = exports.arrowUp = function arrowUp(_ref) {
 	var color = _ref.color,
-	    size = _ref.size;
+	    size = _ref.size,
+	    offset = _ref.offset;
 	return Object.assign({}, defaultArrow, {
 		borderLeft: size + "px solid transparent",
 		borderRight: size + "px solid transparent",
 		borderBottom: size + "px solid " + color,
-		top: "-" + size + "px"
+		top: "-" + (size + offset) + "px"
 	});
 };
 
@@ -42,11 +43,12 @@ var arrowRight = exports.arrowRight = function arrowRight(_ref3) {
 
 var arrowLeft = exports.arrowLeft = function arrowLeft(_ref4) {
 	var color = _ref4.color,
-	    size = _ref4.size;
+	    size = _ref4.size,
+	    offset = _ref4.offset;
 	return Object.assign({}, defaultArrow, {
 		borderTop: size + "px solid transparent",
 		borderBottom: size + "px solid transparent",
 		borderRight: size + "px solid " + color,
-		left: "-" + size + "px"
+		left: "-" + (size + offset) + "px"
 	});
 };

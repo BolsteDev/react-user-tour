@@ -270,6 +270,15 @@ var ReactUserTour = function (_Component) {
 				color: this.props.arrowColor
 			});
 
+			var arrow2 = this.props.arrowBorder ? _react2.default.createElement(_arrow2.default, {
+				position: this.state.position.positioned,
+				width: tourWidth,
+				height: tourHeight,
+				offset: 1,
+				size: this.props.arrowSize,
+				color: this.props.arrowBorder
+			}) : null;
+
 			var extraButtonProps = this.props.buttonStyle ? { style: this.props.buttonStyle } : {};
 
 			var nextButton = this.props.step !== this.props.steps.length ? _react2.default.createElement(
@@ -351,6 +360,7 @@ var ReactUserTour = function (_Component) {
 									transform: "translate3d(" + x + "px, " + y + "px, 0)"
 								})
 							},
+							arrow2,
 							arrow,
 							closeButton,
 							_this4.state.currentTourStep.title,

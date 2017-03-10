@@ -17,7 +17,9 @@ var Arrow = function Arrow(_ref) {
 	    width = _ref.width,
 	    height = _ref.height,
 	    size = _ref.size,
-	    color = _ref.color;
+	    color = _ref.color,
+	    _ref$offset = _ref.offset,
+	    offset = _ref$offset === undefined ? 0 : _ref$offset;
 
 	var arrowStyle = void 0;
 	switch (position) {
@@ -26,7 +28,7 @@ var Arrow = function Arrow(_ref) {
 			arrowStyle.left = width;
 			break;
 		case "right":
-			arrowStyle = (0, _arrowStyles.arrowLeft)({ size: size, color: color });
+			arrowStyle = (0, _arrowStyles.arrowLeft)({ size: size, color: color, offset: offset });
 			break;
 		case "top":
 			arrowStyle = (0, _arrowStyles.arrowDown)({ size: size, color: color });
@@ -38,10 +40,10 @@ var Arrow = function Arrow(_ref) {
 			arrowStyle.left = width - size * 2;
 			break;
 		case "bottom":
-			arrowStyle = (0, _arrowStyles.arrowUp)({ size: size, color: color });
+			arrowStyle = (0, _arrowStyles.arrowUp)({ size: size, color: color, offset: offset });
 			break;
 		case "bottomLeft":
-			arrowStyle = (0, _arrowStyles.arrowUp)({ size: size, color: color });
+			arrowStyle = (0, _arrowStyles.arrowUp)({ size: size, color: color, offset: offset });
 			arrowStyle.left = width - size * 2;
 			break;
 		default:

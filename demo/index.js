@@ -133,15 +133,10 @@ class Demo extends Component {
 						onNext={(step) => this.setState({tourStep: step})}
 						onBack={(step) => this.setState({tourStep: step})}
 						onCancel={() => this.setState({isTourActive: false})}
+            arrowColor={'#FFF'}
+            arrowBorder={'#607D8B'}
             style={{
-            // background: "#EBEFF2",
             height: "auto",
-            // padding: "15px",
-            // paddingBottom: "50px",
-            // width: '350px',
-            // zIndex: '9999',
-            // position: 'absolute',
-            // boxShadow: 'rgba(0, 0, 0, 0.239216) 0px 6px 8px 0px',
           }}
 						steps={[
 							{

@@ -1,7 +1,7 @@
 import React from "react";
 import { arrowUp, arrowDown, arrowLeft, arrowRight } from "./helpers/arrow-styles";
 
-const Arrow = ({position, width, height, size, color}) => {
+const Arrow = ({position, width, height, size, color, offset = 0}) => {
 	let arrowStyle;
 	switch (position) {
 		case "left":
@@ -9,7 +9,7 @@ const Arrow = ({position, width, height, size, color}) => {
 			arrowStyle.left = width;
 			break;
 		case "right":
-			arrowStyle = arrowLeft({size, color});
+			arrowStyle = arrowLeft({size, color, offset});
 			break;
 		case "top":
 			arrowStyle = arrowDown({size, color});
@@ -21,10 +21,10 @@ const Arrow = ({position, width, height, size, color}) => {
 			arrowStyle.left = width - (size * 2);
 			break;
 		case "bottom":
-			arrowStyle = arrowUp({size, color});
+			arrowStyle = arrowUp({size, color, offset});
 			break;
 		case "bottomLeft":
-			arrowStyle = arrowUp({size, color});
+			arrowStyle = arrowUp({size, color, offset});
 			arrowStyle.left = width - (size * 2);
 			break;
 		default:

@@ -235,6 +235,20 @@ export default class ReactUserTour extends Component {
 			/>
 		);
 
+    const arrow2 = (
+			this.props.arrowBorder
+			?
+			<Arrow
+				position={this.state.position.positioned}
+				width={tourWidth}
+				height={tourHeight}
+        offset={1}
+				size={this.props.arrowSize}
+				color={this.props.arrowBorder}
+			/>
+      : null
+		);
+
 		const extraButtonProps = this.props.buttonStyle ? {style: this.props.buttonStyle} : {};
 
 		const nextButton = (
@@ -309,6 +323,7 @@ export default class ReactUserTour extends Component {
                 transform: `translate3d(${x}px, ${y}px, 0)`
               }}
             >
+              {arrow2}
 							{arrow}
 							{closeButton}
 							{this.state.currentTourStep.title}

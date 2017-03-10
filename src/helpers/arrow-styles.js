@@ -4,12 +4,12 @@ const defaultArrow = {
   position: "absolute",
 };
 
-export const arrowUp = ({ color, size }) => (
+export const arrowUp = ({ color, size, offset }) => (
 	Object.assign({}, defaultArrow, {
 		borderLeft: `${size}px solid transparent`,
 		borderRight: `${size}px solid transparent`,
 		borderBottom: `${size}px solid ${color}`,
-		top: `-${size}px`,
+		top: `-${size + offset}px`,
 	})
 );
 
@@ -29,11 +29,11 @@ export const arrowRight = ({ color, size }) => (
 	})
 );
 
-export const arrowLeft = ({ color, size }) => (
+export const arrowLeft = ({ color, size, offset}) => (
 	Object.assign({}, defaultArrow, {
 		borderTop: `${size}px solid transparent`,
 		borderBottom: `${size}px solid transparent`,
 		borderRight: `${size}px solid ${color}`,
-		left: `-${size}px`,
+		left: `-${size + offset}px`,
 	})
 );
