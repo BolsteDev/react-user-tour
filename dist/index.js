@@ -145,6 +145,7 @@ var ReactUserTour = function (_Component) {
 			var newPosition = this.getStepPosition(currentTourStep.selector, w, h, currentTourStep.position, currentTourStep.margin, currentTourStep.horizontalOffset, currentTourStep.verticalOffset);
 
 			if (position.top !== newPosition.top || position.left !== newPosition.left) {
+				console.debug("setting new position:", newPosition);
 				this.setState({
 					position: newPosition
 				}, function () {

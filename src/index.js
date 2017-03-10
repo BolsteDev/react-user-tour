@@ -91,6 +91,7 @@ export default class ReactUserTour extends Component {
     );
 
     if (position.top !== newPosition.top || position.left !== newPosition.left) {
+      console.debug("setting new position:", newPosition)
       this.setState({
         position: newPosition,
       }, () => {
