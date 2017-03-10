@@ -63,12 +63,10 @@ export default class ReactUserTour extends Component {
     let tourHeight = this.styles.height;
     let tourWidth = this.styles.width;
 
-    console.debug(tourWidth, tourHeight, "before");
     if (tourBox) {
       tourHeight = this.styles.height === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().height : this.styles.height;
       tourWidth = this.styles.width === "auto" ? document.querySelector(".tour-box").getBoundingClientRect().width : this.styles.width;
     }
-    console.debug(tourWidth, tourHeight, "after");
     this.setCurrentPosition(tourWidth, tourHeight);
   }
 
@@ -93,7 +91,6 @@ export default class ReactUserTour extends Component {
     );
 
     if (position.top !== newPosition.top || position.left !== newPosition.left) {
-      // console.debug("setting new position:", newPosition)
       this.setState({
         position: newPosition,
       }, () => {
