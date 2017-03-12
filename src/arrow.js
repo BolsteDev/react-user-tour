@@ -6,7 +6,7 @@ const Arrow = ({position, width, height, size, color, offset = 0}) => {
 	switch (position) {
 		case "left":
 			arrowStyle = arrowRight({size, color});
-			arrowStyle.left = width;
+			arrowStyle.left = width + offset;
 			break;
 		case "right":
 			arrowStyle = arrowLeft({size, color, offset});
