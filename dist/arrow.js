@@ -25,7 +25,7 @@ var Arrow = function Arrow(_ref) {
 	switch (position) {
 		case "left":
 			arrowStyle = (0, _arrowStyles.arrowRight)({ size: size, color: color });
-			arrowStyle.left = width - 1 - offset;
+			arrowStyle.left = width - 2 + offset;
 			break;
 		case "right":
 			arrowStyle = (0, _arrowStyles.arrowLeft)({ size: size, color: color, offset: offset });
